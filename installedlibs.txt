@@ -1,2 +1,3 @@
 react-navigation
 react-native-gesture-handler
+react-native-video
