@@ -1,18 +1,21 @@
 /**
  * CREATE WEENSY PAGE
- * 
  * @format
  * @flow
  */
-
 import React, {Component} from 'react';
 import {
   StyleSheet, 
   View,
   ScrollView,
 } from 'react-native';
+import { 
+  VIDEOFEED_FILENAME, 
+  NUMBER_VIDEOSFEED, 
+  FIREBASE_VIDEO_PREFIX, 
+  FIREBASE_VIDEO_POSTFIX 
+} from '../../../constants';
 import { getVideofeedList } from '../../services/firebaseHelper';
-import { VIDEOFEED_FILENAME, NUMBER_VIDEOSFEED, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX } from '../../../constants';
 import VideoSingleForFeed from './components/videoSingleForFeed';
 
 export default class CreateWeensyPage extends Component {
@@ -76,9 +79,6 @@ class VideoContainerComponent extends Component {
     );
   }
 }
-
-
-
 
 const styles = StyleSheet.create({
   scrollContainer: {

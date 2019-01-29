@@ -36,9 +36,9 @@ export default class VideoSingleForFeed extends PureComponent {
                 <Video source={{uri : this.props.singleDownloadUrl}}  // Can be a URL or a local file.
                       ref={(ref) => {
                         this.player = ref
-                      }}                                      // Store reference
-                      onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                      onError={this.videoError}               // Callback when video cannot be loaded
+                      }}                                              // Store reference
+                      onBuffer={this.onBuffer}                        // Callback when remote video is buffering
+                      onError={this.videoError}                       // Callback when video cannot be loaded
                       style={styles.backgroundVideo} 
                       repeat={false}
                       paused={this.state.isVideoPaused} 
