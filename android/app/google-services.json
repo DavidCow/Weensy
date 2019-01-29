@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "774424941697",
+    "firebase_url": "https://weensy1.firebaseio.com",
+    "project_id": "weensy1",
+    "storage_bucket": "weensy1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774424941697:android:80637aad89f498fc",
+        "android_client_info": {
+          "package_name": "com.weensyfull"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774424941697-gh56hn5383bvdkrams6m4rv3rvl6beps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUSXTKmFCRCyxyg7qdD-GhMwK9H3YSq80"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

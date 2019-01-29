@@ -8,72 +8,76 @@
 import React, {Component} from 'react';
 import {
   StyleSheet, 
-  Text, 
   View,
   ScrollView,
-  Dimensions
 } from 'react-native';
-import Video from 'react-native-video';
-import { URL_PREFIX } from '../../../constants';
-
+import { getVideofeedList } from '../../services/firebaseHelper';
+import { VIDEOFEED_FILENAME, NUMBER_VIDEOSFEED, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX } from '../../../constants';
+import VideoSingleForFeed from './components/videoSingleForFeed';
 
 export default class CreateWeensyPage extends Component {
-
+  static navigationOptions = { title: 'Welcome', header: null };
+  
   componentWillMount() {
-    console.log("HALLO " + URL_PREFIX);
-    fetch(URL_PREFIX + "/videofeed.json")
-            .then(response => response.json() )
-            .then(data => {
-              console.log("Hallo du Namek"); 
-              console.log(data)
-            } )
-            .catch(error => console.log(error));
+    /**
+     * Set inital state so render is possible
+     */
+    this.setState({
+      json : [], 
+      currentVideoList : [],
+      videoLoadIndex : NUMBER_VIDEOSFEED
+    });
+        /**
+     * Initial call of setState and fetching entire videofeedlist from Firebase
+     * Then setting the first 10 videos as an array into list.
+     */
+    getVideofeedList(VIDEOFEED_FILENAME).then((json) => 
+    this.setState({
+      json : json, 
+      currentVideoList : json.preview_videos.slice(0, NUMBER_VIDEOSFEED),
+      videoLoadIndex : NUMBER_VIDEOSFEED
+    }, function() {
+      //Do this after asynchronous setState(..) call
+      console.log("Hello bumb"+this.state.currentVideoList);
+    }))
+    .catch(err => console.log(err));
+    
   }
 
   render() {
     return (
-      <VideoContainerComponent url={{uri: "https://www.davidcaos.com/weensy/cap.mp4"}}></VideoContainerComponent>
-    );
+      /* List of 10 videos should be inserted into Video*/
+      <VideoContainerComponent currentVideoList={this.state.currentVideoList} videoLoadIndex={this.state.videoLoadIndex}></VideoContainerComponent>
+      );
   }
 }
 
 /**
  * VideoContainerComponent holds 10 videos 
- * in a ScrollView.
+ * in a ScrollView.ok
+ * 
  */
 class VideoContainerComponent extends Component {
   render() {
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
-                   <VideoSingleForFeed url={this.props.url} />
-                   <VideoSingleForFeed url={this.props.url} />
-                   <VideoSingleForFeed url={this.props.url} />
+            {
+              /**
+               * Loop through video urls and create VideoSingleForFeed Elements
+               */
+              this.props.currentVideoList.map(function(downloadUrl, i) {
+                singleDownloadUrl = FIREBASE_VIDEO_PREFIX + downloadUrl + FIREBASE_VIDEO_POSTFIX;
+                return <VideoSingleForFeed key={i} singleDownloadUrl={singleDownloadUrl} />
+              })
+            }
         </View>
       </ScrollView>
     );
   }
 }
 
-/**
- * Display one single video
- */
-class VideoSingleForFeed extends Component {
-  render() {
-    return (
-      <View style={styles.box}>
-              <Video source={this.props.url}  // Can be a URL or a local file.
-                    ref={(ref) => {
-                      this.player = ref
-                    }}                                      // Store reference
-                    onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                    onError={this.videoError}               // Callback when video cannot be loaded
-                    style={styles.backgroundVideo} 
-                    repeat={false}/>
-       </View>
-    );
-  }
-}
+
 
 
 const styles = StyleSheet.create({
@@ -85,20 +89,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 2,
-  },
-  box: {
-    margin: 2,
-    width: Dimensions.get('window').width / 1 -6,     // Change number "2" - 6 to change element number for one row
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f1c40f'
-  },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
   }
 });

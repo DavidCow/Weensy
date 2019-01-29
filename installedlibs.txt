@@ -1,3 +1,6 @@
 react-navigation
 react-native-gesture-handler
 react-native-video
+react-native-firebase () 16.0.6
+react-nativeg-storage (in app/build.gradle) 16.0.5
+react-native-fs
