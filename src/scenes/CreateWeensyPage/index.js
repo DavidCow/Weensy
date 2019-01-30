@@ -18,9 +18,10 @@ import {
 import { getVideofeedList } from '../../services/firebaseHelper';
 import VideoSingleForFeed from './components/videoSingleForFeed';
 
+
 export default class CreateWeensyPage extends Component {
   static navigationOptions = { title: 'Welcome', header: null };
-  
+
   componentWillMount() {
     /**
      * Set inital state so render is possible

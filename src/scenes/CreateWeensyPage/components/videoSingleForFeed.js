@@ -5,8 +5,13 @@ import {
     Text, 
     View,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    NativeModules,
   } from 'react-native';
+import NavigationService from '../../../NavigationService';
+
+  var ImagePicker = NativeModules.ImageCropPicker;
+
 /**
  * Display one single video
  */
@@ -14,22 +19,41 @@ export default class VideoSingleForFeed extends PureComponent {
     constructor(props) {
       super(props);
       this.onPress = this.onPress.bind(this);
-      this.onPressCreateWeensy = this.onPressCreateWeensy.bind(this);
+      this.state = {
+          image: null,
+          images: null
+      };
     }
     
+    pickSingle(cropit, circular=false, mediaType) {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: cropit,
+        cropperCircleOverlay: circular,
+        compressImageMaxWidth: 400,
+        compressImageMaxHeight: 400,
+        compressImageQuality: 0.5,
+        compressVideoPreset: 'MediumQuality',
+        includeExif: true,
+        mediaType: 'video'
+      }).then(image => {
+        console.log('RECEIVED video', image);
+        this.setState({
+          image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+          images: null
+        });
+        NavigationService.navigate('EditVideoPage', {userName : 'user1'});
+      }).catch(e => {
+        console.log(e);
+        Alert.alert(e.message ? e.message : e);
+      });
+    }
+
     componentWillMount() {
       this.setState({
         isVideoPaused : true
       });
-    }
-  
-    onPressCreateWeensy() {
-      this.setState({ 
-        isVideoPaused: false 
-      }, () => {
-        this.player.seek(1.5);
-      })
-      console.log("onPressCreateWeensy");
     }
 
     onPress() {
@@ -58,7 +82,7 @@ export default class VideoSingleForFeed extends PureComponent {
                           />
                              <TouchableOpacity
                               style={styles.button}
-                              onPress={this.onPressCreateWeensy}>
+                              onPress={() => this.pickSingle(false)}>
                                   <Text stylel={styles.createButton}>Create Weensy</Text> 
                             </TouchableOpacity>
                 </View>
