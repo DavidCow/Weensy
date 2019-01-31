@@ -25,12 +25,21 @@ export default class VideoSingleForFeed extends PureComponent {
       };
     }
     
+    pickCamera() {
+      ImagePicker.openCamera({
+        mediaType: 'video',
+      }).then(image => {
+        console.log(image);
+        NavigationService.navigate('EditVideoPage', {uri: image.path, width: image.width, height: image.height, mime: image.mime});
+      });
+    }
+      
     pickSingle(cropit, circular=false, mediaType) {
       ImagePicker.openPicker({
         width: 300,
         height: 300,
-        cropping: cropit,
-        cropperCircleOverlay: circular,
+        //cropping: cropit,
+        //cropperCircleOverlay: circular,
         compressImageMaxWidth: 400,
         compressImageMaxHeight: 400,
         compressImageQuality: 0.5,
@@ -43,7 +52,7 @@ export default class VideoSingleForFeed extends PureComponent {
           image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
           images: null
         });
-        NavigationService.navigate('EditVideoPage', {userName : 'user1'});
+        NavigationService.navigate('EditVideoPage', {uri: image.path, width: image.width, height: image.height, mime: image.mime});
       }).catch(e => {
         console.log(e);
         Alert.alert(e.message ? e.message : e);
@@ -79,6 +88,9 @@ export default class VideoSingleForFeed extends PureComponent {
                           style={styles.backgroundVideo} 
                           repeat={false}
                           paused={this.state.isVideoPaused} 
+                          volume={1}
+                          muted={false}
+                          rate={1}
                           />
                              <TouchableOpacity
                               style={styles.button}
