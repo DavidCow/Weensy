@@ -6,3 +6,4 @@ react-nativeg-storage (in app/build.gradle) 16.0.5
 react-native-fs
 react-native-image-crop-picker ^0.22.0
 react-native-elements & react-native-vector-icons
+react-native-sound

@@ -33,9 +33,11 @@ export function downloadFileFromFirebaseStorage(googleStorageUrl, localFilePath)
 
 /**
  * Get JSON list of videos from Firebase Storage
+ * e.g. for beats.json console.log("Beats loaded and ready4: "+this.state.beats["cap"].clippings);
  */
-export function getVideofeedList(filename) {
-    return getDownloadUrlFromFirebaseStorage(GS_PATH + filename).then(downloadUrl => {
+export function getJsonListFromFirebaseStorage(filename, foldername="/") {
+    var firebaseUrl = GS_PATH + foldername + filename;
+    return getDownloadUrlFromFirebaseStorage(firebaseUrl).then(downloadUrl => {
         return fetch(downloadUrl,
             {
                 method: "GET"

@@ -7,10 +7,13 @@ import {
     Dimensions,
     TouchableOpacity,
     NativeModules,
+    Alert
   } from 'react-native';
 import NavigationService from '../../../NavigationService';
+import { getJsonListFromFirebaseStorage } from '../../../services/firebaseHelper';
+import { BEATS_FILENAME, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX, FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME, OGG} from '../../../../constants'
 
-  var ImagePicker = NativeModules.ImageCropPicker;
+var ImagePicker = NativeModules.ImageCropPicker;
 
 /**
  * Display one single video
@@ -19,6 +22,7 @@ export default class VideoSingleForFeed extends PureComponent {
     constructor(props) {
       super(props);
       this.onPress = this.onPress.bind(this);
+      this.pickSingle = this.pickSingle.bind(this);
       this.state = {
           image: null,
           images: null
@@ -29,12 +33,41 @@ export default class VideoSingleForFeed extends PureComponent {
       ImagePicker.openCamera({
         mediaType: 'video',
       }).then(image => {
-        console.log(image);
+        console.log("Video has been recorded: " + image);
         NavigationService.navigate('EditVideoPage', {uri: image.path, width: image.width, height: image.height, mime: image.mime});
       });
     }
       
-    pickSingle(cropit, circular=false, mediaType) {
+     /**
+      * Get beats.json for frequencies
+      */
+    setSelectedBeat() {
+      getJsonListFromFirebaseStorage(BEATS_FILENAME, "").then((json) => 
+      this.setState({
+        selectedBeat : json.beats[this.props.filename]
+      }, function() {
+        console.log("Selected Beat loaded and ready." + this.state.selectedBeat["frequency"]);
+      }))
+      .catch(err => console.log("Beat could not been accessed from Firebase storage: " + err));
+    }
+
+     /**
+      * Get beats.json for frequencies
+      */
+     setSelectedTemplateSound() {
+      //getDownloadUrlFromFirebaseStorage(GS_PATH + FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME + "/" + this.props.filename).then((soundUri) => 
+      var soundUri = FIREBASE_VIDEO_PREFIX + FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME + this.props.filename + OGG + FIREBASE_VIDEO_POSTFIX;
+      this.setState({
+        templateSoundBeatUri : soundUri
+      }, function() {
+        console.log("Selected Beat Sound Uri loaded and ready." + this.state.templateSoundBeatUri);
+      });
+      
+    }
+
+    pickSingle() {
+      this.setSelectedBeat();
+      this.setSelectedTemplateSound();
       ImagePicker.openPicker({
         width: 300,
         height: 300,
@@ -47,14 +80,13 @@ export default class VideoSingleForFeed extends PureComponent {
         includeExif: true,
         mediaType: 'video'
       }).then(image => {
-        console.log('RECEIVED video', image);
-        this.setState({
-          image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-          images: null
-        });
-        NavigationService.navigate('EditVideoPage', {uri: image.path, width: image.width, height: image.height, mime: image.mime});
+        console.log('SUCCESSFULLY RECEIVED VIDEO', image);
+        /**
+         * Navigate to Processing Weensy Page (Edit Video Page)
+         */
+        NavigationService.navigate('EditVideoPage', {uri: image.path, width: image.width, height: image.height, mime: image.mime, selectedBeat : this.state.selectedBeat, templateSoundBeatUri : this.state.templateSoundBeatUri});
       }).catch(e => {
-        console.log(e);
+        console.log("Selecting Video from Gallery has not succeeded: " + e);
         Alert.alert(e.message ? e.message : e);
       });
     }
@@ -94,7 +126,7 @@ export default class VideoSingleForFeed extends PureComponent {
                           />
                              <TouchableOpacity
                               style={styles.button}
-                              onPress={() => this.pickSingle(false)}>
+                              onPress={() => this.pickSingle(this.props.filename)}>
                                   <Text stylel={styles.createButton}>Create Weensy</Text> 
                             </TouchableOpacity>
                 </View>
