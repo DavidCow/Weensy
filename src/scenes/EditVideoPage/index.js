@@ -88,7 +88,7 @@ export default class EditVideoPage extends Component {
 
   onSliderChange = (value) => {
     interpolatedVideoPosition = (value*convertMsToSec(this.state.duration));
-    //this.player.seek(interpolatedVideoPosition);
+    this.player.seek(interpolatedVideoPosition);
     this.setState({ 
       value : value,
       selectedBeatPosition : interpolatedVideoPosition
@@ -117,19 +117,30 @@ export default class EditVideoPage extends Component {
 
   /** Video Move Progress */
   onProgress = (progressValues) => {
-    console.log("END OF CURRENT CLIPPING : " + this.state.endOfCurrentClippingTimecode);
-    if (convertSecToMS(progressValues["currentTime"]) > this.state.endOfCurrentClippingTimecode) {
-      this.player.seek(this.state.selectedBeatPosition);
-      var nextClipIndex = (this.state.clipIndex + 1);
-      if (nextClipIndex > this.state.clipLastIndex) {
+    var currentTime = convertSecToMS(progressValues["currentTime"]);
+    if (currentTime > this.state.endOfCurrentClippingTimecode) {
+      if (this.state.clipIndex==this.state.clipLastIndex+1) {
+        //STOP VIDEO after last clipping end (plus 1500 ms)
         this.setState({
-          endOfCurrentClippingTimecode : 1000000
-        }); 
+          paused : true
+        });
+        console.log("single video preview circle end");
       } else {
-        this.setState({
-          endOfCurrentClippingTimecode : (convertSecToMS(this.state.selectedBeatPosition)+calculateTimeBetweenTwoTimecodesInInt(this.state.clippings[this.state.clipIndex], this.state.clippings[this.state.clipIndex+1])),
-          clipIndex : nextClipIndex
-        }); 
+        //Keep calculating next current clipping end
+        var nextClipIndex = (this.state.clipIndex + 1);
+        if (nextClipIndex > this.state.clipLastIndex) {
+          this.setState({
+            endOfCurrentClippingTimecode : currentTime + 1500,
+            clipIndex : nextClipIndex
+          });
+        } else {
+          //TODO: CHANGE FREQUENCY HERE
+          this.player.seek(this.state.selectedBeatPosition);
+          this.setState({
+            endOfCurrentClippingTimecode : (convertSecToMS(this.state.selectedBeatPosition)+calculateTimeBetweenTwoTimecodesInInt(this.state.clippings[this.state.clipIndex], this.state.clippings[this.state.clipIndex+1])),
+            clipIndex : nextClipIndex
+          }); 
+        }
       }
     }
   }
@@ -163,11 +174,11 @@ export default class EditVideoPage extends Component {
                                           /> 
                       </View>
               </View>
+            <Slider value={this.state.value} onValueChange={this.onSliderChange} />
             <TouchableOpacity onPress={this.onPressPlay}> 
               <Text>PLAY</Text> 
             </TouchableOpacity>
-            <Slider value={this.state.value} onValueChange={this.onSliderChange} />
-            <Text style={{backgroundColor: 'blue'}}>Slidervalue: {this.state.value}</Text>
+            <Text style={{backgroundColor: 'blue'}}>Beat position {Math.round(this.state.selectedBeatPosition*100)/100}</Text>
             <Text style={styles.welcome}>Drag Slider to adjust Beat.</Text>
       </View>
     );
@@ -178,7 +189,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     backgroundColor: 'green'
   },
   welcome: {
