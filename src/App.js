@@ -9,6 +9,7 @@ import LoginPage from './scenes/LoginPage';
 import MyWeensysPage from './scenes/MyWeensysPage';
 import EditVideoPage from './scenes/EditVideoPage';
 import NavigationService from './NavigationService';
+import ShareVideoPage from './scenes/ShareVideoPage';
 
 
 const MyWeensysPageStack = createStackNavigator({ 
@@ -18,6 +19,12 @@ const MyWeensysPageStack = createStackNavigator({
     navigationOptions: {
       title: 'Edit Video Page',
     }
+  },
+  'ShareVideoPage' : {
+    screen: ShareVideoPage,
+    navigationOptions: {
+      title: 'Share Video'
+    }
   }
 });
 
@@ -25,7 +32,7 @@ MyWeensysPageStack.navigationOptions = ({ navigation }) => {
   let { routeName } = navigation.state.routes[navigation.state.index];
   let navigationOptions = {};
 
-  if (routeName === 'EditVideoPage') {
+  if (routeName === 'EditVideoPage' || routeName === 'ShareVideoPage') {
     navigationOptions.tabBarVisible = false;
   }
 

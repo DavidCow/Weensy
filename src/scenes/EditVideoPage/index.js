@@ -15,6 +15,7 @@ import Video from 'react-native-video';
 import { Slider } from 'react-native-elements';
 import Sound from 'react-native-sound';
 import {calculateTimeBetweenTwoTimecodesInInt, convertSecToMS, convertMsToSec} from './services/timecodeHelper';
+import NavigationService from './../../NavigationService';
 
 /**
  * TODO:
@@ -35,6 +36,7 @@ export default class EditVideoPage extends Component {
     this.onPressPlay = this.onPressPlay.bind(this);
     this.onProgress = this.onProgress.bind(this);
     this.resetIndex = this.resetIndex.bind(this);
+    this.onPressNext = this.onPressNext.bind(this);
 
     this.playSound = this.playSound.bind(this);
   }
@@ -146,9 +148,22 @@ export default class EditVideoPage extends Component {
     }
   }
   
+  /***
+   * Render video and navigate to "Share" Page
+   */
+  onPressNext() {
+    console.log("Rendering video now..");
+    NavigationService.navigate('ShareVideoPage', {params: this.props.navigation.state.params});
+  }
+
   render() {
     return (
       <View style={styles.container}>
+            <View style={styles.pressNextButton}>
+              <TouchableOpacity onPress={this.onPressNext}> 
+                <Text>NEXT</Text> 
+              </TouchableOpacity>
+            </View>
               <View style ={styles.videoContainer}>
                         <View style={{ 
                             width: this.props.navigation.getParam('width', 100)/4,     // Change number "2" - 6 to change element number for one row
@@ -211,6 +226,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'blue'
+  },
+  pressNextButton: {
+    width: Dimensions.get('window').width,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
     backgroundColor: 'blue'
   }
 });
