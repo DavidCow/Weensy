@@ -99,19 +99,20 @@ export default class EditVideoPage extends Component {
 
   onPressPlay = () => {
     console.log("Press Play selectedBeatPosition: " + this.state.selectedBeatPosition);
+    this.resetIndex();
     this.player.seek(this.state.selectedBeatPosition);
-
     this.setState({
       paused : false
     });
 
     ///TODO : SOUND ONLY PLAYS ONCE, DO I HAVE TO REDOWNLOAD IT EVERYTIME? OR RESET SOMETHING
+    this.playSound(this.state.templateSound);
   }
 
   playSound(sound) {
     sound.play(() => {
       // Release when it's done so we're not using up resources
-      sound.release();
+      //sound.release();
     });
   }
 
