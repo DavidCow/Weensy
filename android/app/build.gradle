@@ -154,6 +154,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-ffmpeg')
     compile project(':react-native-sound')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-fs')

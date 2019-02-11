@@ -8,3 +8,4 @@ export const FIREBASE_PREVIEW_FOLDERNAME = "/previews%2F";
 export const FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME = "/template_sounds%2F";
 export const OGG = ".ogg";
 export const MP3 = ".mp3";
+export const MP4 = ".mp4";

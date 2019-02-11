@@ -72,3 +72,8 @@ export function convertTimeCodeToMillisecs(timeCode) {
   //hour calculation is skipped, probably never used
   return endResultInMs;
 }
+
+//input: 4.2 output 00:00:04.200
+export function convertDurationInSecToTimeCode(durationInSec) {
+  return convertMsIntIntoTimeCodeStr(convertSecToMS(durationInSec));
+}

@@ -9,13 +9,19 @@ import {
   Text, 
   View,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
+  CameraRoll
 } from 'react-native';
 import Video from 'react-native-video';
 import { Slider } from 'react-native-elements';
 import Sound from 'react-native-sound';
-import {calculateTimeBetweenTwoTimecodesInInt, convertSecToMS, convertMsToSec} from './services/timecodeHelper';
 import NavigationService from './../../NavigationService';
+import {calculateTimeBetweenTwoTimecodesInInt, convertSecToMS, convertMsToSec, calculateEndOfClip, convertDurationInSecToTimeCode} from './services/timecodeHelper';
+import {createCommand, executeCommand, addToMergeFile} from './services/ffmpegHelper';
+import { RNFFmpeg } from 'react-native-ffmpeg';
+import { MP4 } from '../../../constants';
+
 
 /**
  * TODO:
@@ -42,7 +48,10 @@ export default class EditVideoPage extends Component {
   }
 
   componentWillMount() {
+    var RNFS = require("react-native-fs");
     this.setState({
+      showLoadingIndicator : false,
+      rnfsdocpath : RNFS.DocumentDirectoryPath,
       value : 0.5,
       clippings : this.props.navigation.getParam('selectedBeat', null)["clippings"],
       clipIndex : 1,
@@ -152,8 +161,79 @@ export default class EditVideoPage extends Component {
    * Render video and navigate to "Share" Page
    */
   onPressNext() {
-    console.log("Rendering video now..");
-    NavigationService.navigate('ShareVideoPage', {params: this.props.navigation.state.params});
+      this.setState({
+        showLoadingIndicator : true
+      });
+
+      console.log("Rendering video now..");
+      var RNFS = require('react-native-fs');
+
+      //PREPARE VARIABLES FOR CLIPPINGS GENERATION
+      var lastTimeCode = "00:00:00.000";
+      var mergeFileTxt = "";
+      var clippings = this.state.clippings;
+      var TMP_VIDEO_NAME = "tmp_merge_video";
+
+      //LOOPS THROUGH CLIPPINGS AND CREATES THE VIDEO
+      for (var i=0; i < clippings.length; i++) {;
+        if (i == 0) {
+          lastTimeCode = clippings[clippings.length-(i+1)];
+          continue;
+        }
+    
+        //TMP NAME FOR SINGLE CLIP
+        var outputFilename = TMP_VIDEO_NAME+i+MP4;
+
+        //ADD 'file %path%' to string
+        mergeFileTxt = addToMergeFile(mergeFileTxt, RNFS.DocumentDirectoryPath + "/" + outputFilename);
+    
+        //CALCULATE END TIMECODE of current clip calculateEndOfClip("00:00:00.123", 200) -> "00:00:00.323"
+        var endOfClipTimeCode = calculateEndOfClip(convertDurationInSecToTimeCode(this.state.selectedBeatPosition), calculateTimeBetweenTwoTimecodesInInt(lastTimeCode, clippings[clippings.length-(i+1)]));
+    
+        //FFMPEG CMD TO CROP VIDEO
+        let command = createCommand(this.state.currentVideoUri, RNFS.DocumentDirectoryPath + "/" +outputFilename, this.state.selectedBeatPosition, endOfClipTimeCode, "");
+        
+        executeCommand(command);
+
+        //TODO: USE path : RNFS.DocumentDirectoryPath + "/" +outputFilename      CREATE FREQUENCY CHANGED CLIP HERE
+
+        lastTimeCode = clippings[clippings.length-(i+1)];
+      };
+
+      //WRITE MERGEFILE
+      var path = RNFS.DocumentDirectoryPath + '/tmp_mergefile.txt';
+      RNFS.writeFile(path, mergeFileTxt, "utf8")  
+         .then((success) => {
+           console.log('FILE WRITTEN!');
+         })
+         .catch((err) => {
+           console.log("FILE NOT WRITTEN! Error: " + err.message);
+      });
+
+      //FFMPEG MERGE CMD
+      var command = '-f concat -safe 0 -i '+ RNFS.DocumentDirectoryPath   +'/tmp_mergefile.txt -c copy '+ RNFS.DocumentDirectoryPath   +'/merged.mp4';
+
+
+    //TODOS
+    ////1b(optional for now) (add intro and outro)
+    ////1cchange frequency of these clippings  (research best way: frontend library VS native library)
+    //ui - show progress w/ "seconds left" or "bar" or both
+    //finally: consider using this algorithm for the preview
+    //future: add zoom, filters, mirror
+    //IMPORTANT!!!! CALIBRATE TIMING MUSIC AND VIDEO
+
+    
+
+
+    //MERGE -> MIX AUDIO IN -> NAVIGATE
+    RNFFmpeg.execute(command).then(result => {
+      command = '-y -i ' + RNFS.DocumentDirectoryPath   +'/merged.mp4 -i ' + this.state.templateSoundUri + ' -filter_complex amerge ' + RNFS.DocumentDirectoryPath   +'/mergedWithMusic.mp4';
+      RNFFmpeg.execute(command).then(result => {
+        CameraRoll.saveToCameraRoll(RNFS.DocumentDirectoryPath + '/mergedWithMusic.mp4', 'video').then(() => {
+          NavigationService.navigate('ShareVideoPage', {params: this.props.navigation.state.params, currentVideoUri: RNFS.DocumentDirectoryPath   +'/mergedWithMusic.mp4'});
+        }).catch((err) => console.log('Error: Merged File could not be saved into camera roll. Msg: ' + err));
+      });
+    });
   }
 
   render() {
@@ -163,6 +243,9 @@ export default class EditVideoPage extends Component {
               <TouchableOpacity onPress={this.onPressNext}> 
                 <Text>NEXT</Text> 
               </TouchableOpacity>
+              {
+              this.state.showLoadingIndicator ? <ActivityIndicator /> : <View />
+              }
             </View>
               <View style ={styles.videoContainer}>
                         <View style={{ 
