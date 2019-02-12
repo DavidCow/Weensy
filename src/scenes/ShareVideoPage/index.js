@@ -10,6 +10,7 @@ import {
   StyleSheet, 
   Text, 
   View,
+  Dimensions
 } from 'react-native';
 import Video from 'react-native-video';
 
@@ -23,27 +24,32 @@ export default class ShareVideoPage extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Share your Weensy on Instagra, Tik Tok, ..</Text>
+        <Text style={styles.welcome}>Share your Weensy on Instagram, Tik Tok, ..</Text>
 
-        <View style={styles.body}>
-        <Video source={{uri : this.props.navigation.getParam('currentVideoUri', null)}}  // Can be a URL or a local file.
-                                          ref={(ref) => {
-                                            this.player = ref
-                                          }}                                              // Store reference
-                                          onBuffer={this.onBuffer}                        // Callback when remote video is buffering
-                                          onError={this.videoError}                       // Callback when video cannot be loaded
-                                          onLoad={this.onLoad}
-                                          onEnd={this.onEnd}
-                                          style={styles.backgroundVideo} 
-                                          repeat={true}
-                                          paused={false} 
-                                          rate={1}
-                                          volume={1}
-                                          muted={false}
-                                          resizeMode={'stretch'}
-                                          /> 
-        </View>
-
+        <View style={styles.videoContainer}>
+        <View style={{ 
+                            width: 300,             // Change number "2" - 6 to change element number for one row
+                            height: 300,           // Set to Screenheight
+                            backgroundColor: 'blue',
+                        }}>
+            <Video source={{uri : this.props.navigation.getParam('currentVideoUri', null)}}  // Can be a URL or a local file.
+                                              ref={(ref) => {
+                                                this.player = ref
+                                              }}                                              // Store reference
+                                              onBuffer={this.onBuffer}                        // Callback when remote video is buffering
+                                              onError={this.videoError}                       // Callback when video cannot be loaded
+                                              onLoad={this.onLoad}
+                                              onEnd={this.onEnd}
+                                              style={styles.backgroundVideo} 
+                                              repeat={true}
+                                              paused={false} 
+                                              rate={1}
+                                              volume={1}
+                                              muted={false}
+                                              resizeMode={'stretch'}
+                                              /> 
+            </View>
+         </View>
       </View>
     );
   }
@@ -72,5 +78,11 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
+  },
+  videoContainer: {
+    width: Dimensions.get('window').width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue'
   }
 });

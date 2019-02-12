@@ -69,14 +69,12 @@ export default class VideoSingleForFeed extends PureComponent {
       this.setSelectedBeat();
       this.setSelectedTemplateSound();
       ImagePicker.openPicker({
-        width: 300,
-        height: 300,
-        //cropping: cropit,
-        //cropperCircleOverlay: circular,
-        compressImageMaxWidth: 400,
-        compressImageMaxHeight: 400,
-        compressImageQuality: 0.5,
-        compressVideoPreset: 'MediumQuality',
+        //width: 300,
+       // height: 300,
+        compressImageMaxWidth: 100,
+        compressImageMaxHeight: 100,
+        compressImageQuality: 0.2,
+        compressVideoPreset: 'LowQuality',
         includeExif: true,
         mediaType: 'video'
       }).then(image => {

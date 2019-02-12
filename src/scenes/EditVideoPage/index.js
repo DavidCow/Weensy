@@ -49,7 +49,24 @@ export default class EditVideoPage extends Component {
 
   componentWillMount() {
     var RNFS = require("react-native-fs");
+    var rawHeight = this.props.navigation.getParam('height');
+    var rawWidth = this.props.navigation.getParam('width');
+    var videoHeight = 0;
+    var videoWidth = 0;
+    if (rawHeight > rawWidth) {
+      let multiplicator = (Dimensions.get('window').height / 2) / rawHeight;
+      videoHeight = Dimensions.get('window').height / 2;
+      videoWidth = multiplicator * rawWidth;
+    } else if (rawHeight <= rawWidth) {
+      let multiplicator = Dimensions.get('window').width / rawWidth;
+      videoWidth = Dimensions.get('window').width;
+      videoHeight = multiplicator * rawHeight;
+    }
+
+
     this.setState({
+      videoHeight: videoHeight,
+      videoWidth: videoWidth,
       showLoadingIndicator : false,
       rnfsdocpath : RNFS.DocumentDirectoryPath,
       value : 0.5,
@@ -209,22 +226,10 @@ export default class EditVideoPage extends Component {
          .catch((err) => {
            console.log("FILE NOT WRITTEN! Error: " + err.message);
       });
-
+      
       //FFMPEG MERGE CMD
-      var command = '-f concat -safe 0 -i '+ RNFS.DocumentDirectoryPath   +'/tmp_mergefile.txt -c copy '+ RNFS.DocumentDirectoryPath   +'/merged.mp4';
-
-
-    //TODOS
-    ////1b(optional for now) (add intro and outro)
-    ////1cchange frequency of these clippings  (research best way: frontend library VS native library)
-    //ui - show progress w/ "seconds left" or "bar" or both
-    //finally: consider using this algorithm for the preview
-    //future: add zoom, filters, mirror
-    //IMPORTANT!!!! CALIBRATE TIMING MUSIC AND VIDEO
-
+    var command = '-f concat -safe 0 -i '+ RNFS.DocumentDirectoryPath   +'/tmp_mergefile.txt -c copy '+ RNFS.DocumentDirectoryPath   +'/merged.mp4';
     
-
-
     //MERGE -> MIX AUDIO IN -> NAVIGATE
     RNFFmpeg.execute(command).then(result => {
       command = '-y -i ' + RNFS.DocumentDirectoryPath   +'/merged.mp4 -i ' + this.state.templateSoundUri + ' -filter_complex amerge ' + RNFS.DocumentDirectoryPath   +'/mergedWithMusic.mp4';
@@ -234,6 +239,15 @@ export default class EditVideoPage extends Component {
         }).catch((err) => console.log('Error: Merged File could not be saved into camera roll. Msg: ' + err));
       });
     });
+ 
+    
+  //TODOS
+  ////1b(optional for now) (add intro and outro)
+  ////1cchange frequency of these clippings  (research best way: frontend library VS native library)
+  //ui - show progress w/ "seconds left" or "bar" or both
+  //finally: consider using this algorithm for the preview
+  //future: add zoom, filters, mirror
+  //IMPORTANT!!!! CALIBRATE TIMING MUSIC AND VIDEO
   }
 
   render() {
@@ -249,8 +263,8 @@ export default class EditVideoPage extends Component {
             </View>
               <View style ={styles.videoContainer}>
                         <View style={{ 
-                            width: this.props.navigation.getParam('width', 100)/4,     // Change number "2" - 6 to change element number for one row
-                            height: this.props.navigation.getParam('height', 100)/4,          // Set to Screenheight
+                            width: this.state.videoWidth,             // Change number "2" - 6 to change element number for one row
+                            height: this.state.videoHeight,           // Set to Screenheight
                             backgroundColor: 'blue',
                         }}>
                          
