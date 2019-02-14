@@ -53,7 +53,6 @@ export default class CreateWeensyPage extends Component {
   }
 
   onAddVideos = () => {
-    console.log("ADD TEN");
     var endIndex = this.state.videoLoadIndex + 10;
     if (this.state.videoLoadIndex+10 < this.state.json.length) {
       endIndex = this.state.json.length;
@@ -89,7 +88,7 @@ class VideoContainerComponent extends Component {
       actElement : 1,
       currentScrollPosY : 0,
       height : Dimensions.get('screen').height-getStatusBarHeight(),
-      scrollThreshold : 70
+      scrollThreshold : 48
     });
   }
 
@@ -105,6 +104,7 @@ class VideoContainerComponent extends Component {
     }, function() {
       this.scrollTo();
       if (this.state.actElement % 10 == 5) {
+        //Add videos from parent component
         this.props.action();
       }
     });

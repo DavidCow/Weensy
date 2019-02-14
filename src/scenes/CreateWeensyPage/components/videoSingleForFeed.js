@@ -99,9 +99,9 @@ export default class VideoSingleForFeed extends PureComponent {
 
     onPress() {
       this.setState({ 
-        isVideoPaused: false 
+        isVideoPaused: !this.state.isVideoPaused 
       }, () => {
-        this.player.seek(0);
+        //this.player.seek(0);
       })
     }
   
@@ -111,24 +111,24 @@ export default class VideoSingleForFeed extends PureComponent {
           style={styles.button}
           onPress={this.onPress}> 
                 <View style={styles.box}>
-                    <Video source={{uri : this.props.singleDownloadUrl}}  // Can be a URL or a local file.
-                          ref={(ref) => {
-                            this.player = ref
-                          }}                                              // Store reference
-                          onBuffer={this.onBuffer}                        // Callback when remote video is buffering
-                          onError={this.videoError}                       // Callback when video cannot be loaded
-                          style={styles.backgroundVideo} 
-                          repeat={false}
-                          paused={this.state.isVideoPaused} 
-                          volume={1}
-                          muted={false}
-                          rate={1}
-                          />
-                             <TouchableOpacity
-                              style={styles.button}
-                              onPress={() => this.pickSingle(this.props.filename)}>
-                                  <Text stylel={styles.createButton}>Create Weensy</Text> 
-                            </TouchableOpacity>
+                            <Video source={{uri : this.props.singleDownloadUrl}}  // Can be a URL or a local file.
+                                  ref={(ref) => {
+                                    this.player = ref
+                                  }}                                              // Store reference
+                                  onBuffer={this.onBuffer}                        // Callback when remote video is buffering
+                                  onError={this.videoError}                       // Callback when video cannot be loaded
+                                  style={styles.backgroundVideo} 
+                                  repeat={true}
+                                  paused={this.state.isVideoPaused} 
+                                  volume={1}
+                                  muted={false}
+                                  rate={1}
+                                  />
+                              <TouchableWithoutFeedback
+                                  style={styles.button}
+                                  onPress={() => this.pickSingle(this.props.filename)} >
+                                          <Text style={styles.createButton}>Create Weensy</Text> 
+                              </TouchableWithoutFeedback>
                 </View>
         </TouchableWithoutFeedback>
           
@@ -140,8 +140,8 @@ export default class VideoSingleForFeed extends PureComponent {
     box: {
       width: Dimensions.get('screen').width,     // Change number "2" - 6 to change element number for one row
       height: Dimensions.get('screen').height - getStatusBarHeight(),          // Set to Screenheight
-      justifyContent: 'center',
-      alignItems: 'center',
+      //justifyContent: 'center',
+      //alignItems: 'center',
       backgroundColor: '#000000'
     },
     backgroundVideo: {
@@ -154,8 +154,7 @@ export default class VideoSingleForFeed extends PureComponent {
     createButton: {
       position: 'absolute',
       left: Dimensions.get('screen').width * 0.7,
-      top: (Dimensions.get('screen').height-getStatusBarHeight()) * 0.8,
-      bottom: 0,
-      right: 0
+      top: (Dimensions.get('screen').height-getStatusBarHeight()) * 0.6,
+      color: 'white'
     }
   });
