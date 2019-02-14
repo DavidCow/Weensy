@@ -6,12 +6,14 @@ import {
     View,
     Dimensions,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     NativeModules,
     Alert
   } from 'react-native';
 import NavigationService from '../../../NavigationService';
 import { getJsonListFromFirebaseStorage } from '../../../services/firebaseHelper';
-import { BEATS_FILENAME, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX, FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME, OGG} from '../../../../constants'
+import { BEATS_FILENAME, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX, FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME, OGG} from '../../../../constants';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 var ImagePicker = NativeModules.ImageCropPicker;
 
@@ -28,7 +30,7 @@ export default class VideoSingleForFeed extends PureComponent {
           images: null
       };
     }
-    
+
     pickCamera() {
       ImagePicker.openCamera({
         mediaType: 'video',
@@ -105,7 +107,7 @@ export default class VideoSingleForFeed extends PureComponent {
   
     render() {
       return (
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           style={styles.button}
           onPress={this.onPress}> 
                 <View style={styles.box}>
@@ -128,7 +130,7 @@ export default class VideoSingleForFeed extends PureComponent {
                                   <Text stylel={styles.createButton}>Create Weensy</Text> 
                             </TouchableOpacity>
                 </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
           
       );
     }
@@ -136,9 +138,8 @@ export default class VideoSingleForFeed extends PureComponent {
 
   const styles = StyleSheet.create({
     box: {
-      margin: 2,
-      width: Dimensions.get('window').width / 1 -6,     // Change number "2" - 6 to change element number for one row
-      height: Dimensions.get('window').height,          // Set to Screenheight
+      width: Dimensions.get('screen').width,     // Change number "2" - 6 to change element number for one row
+      height: Dimensions.get('screen').height - getStatusBarHeight(),          // Set to Screenheight
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#000000'
@@ -152,8 +153,8 @@ export default class VideoSingleForFeed extends PureComponent {
     },
     createButton: {
       position: 'absolute',
-      left: Dimensions.get('window').width * 0.7,
-      top: Dimensions.get('window').height * 0.8,
+      left: Dimensions.get('screen').width * 0.7,
+      top: (Dimensions.get('screen').height-getStatusBarHeight()) * 0.8,
       bottom: 0,
       right: 0
     }

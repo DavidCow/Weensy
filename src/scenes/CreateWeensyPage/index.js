@@ -8,6 +8,9 @@ import {
   StyleSheet, 
   View,
   ScrollView,
+  TouchableOpacity,
+  Text,
+  Dimensions
 } from 'react-native';
 import { 
   VIDEOFEED_FILENAME, 
@@ -18,12 +21,14 @@ import {
 } from '../../../constants';
 import { getJsonListFromFirebaseStorage } from '../../services/firebaseHelper';
 import VideoSingleForFeed from './components/videoSingleForFeed';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 
 export default class CreateWeensyPage extends Component {
   static navigationOptions = { title: 'Welcome', header: null };
 
   componentWillMount() {
+    this.onAddVideos = this.onAddVideos.bind(this);
     /**
      * Set inital state so render is possible
      */
@@ -32,7 +37,7 @@ export default class CreateWeensyPage extends Component {
       currentVideoList : [],
       videoLoadIndex : NUMBER_VIDEOSFEED
     });
-        /**
+     /**
      * Initial call of setState and fetching entire videofeedlist from Firebase
      * Then setting the first 10 videos as an array into list.
      */
@@ -47,10 +52,25 @@ export default class CreateWeensyPage extends Component {
     .catch(err => console.log(err));
   }
 
+  onAddVideos = () => {
+    console.log("ADD TEN");
+    var endIndex = this.state.videoLoadIndex + 10;
+    if (this.state.videoLoadIndex+10 < this.state.json.length) {
+      endIndex = this.state.json.length;
+      if (this.state.videoLoadIndex == endIndex) return;
+    } 
+    this.setState({
+      currentVideoList : [...this.state.currentVideoList, ...this.state.json.preview_videos.slice(this.state.videoLoadIndex, endIndex)],
+      videoLoadIndex : endIndex
+    });
+  }
+
   render() {
     return (
       /* List of 10 videos should be inserted into Video*/
-      <VideoContainerComponent currentVideoList={this.state.currentVideoList} videoLoadIndex={this.state.videoLoadIndex}></VideoContainerComponent>
+      <View>
+        <VideoContainerComponent currentVideoList={this.state.currentVideoList} videoLoadIndex={this.state.videoLoadIndex} action={this.onAddVideos}></VideoContainerComponent>
+      </View>
       );
   }
 }
@@ -60,10 +80,61 @@ export default class CreateWeensyPage extends Component {
  * in a ScrollView.ok
  */
 class VideoContainerComponent extends Component {
+
+  componentWillMount() {
+    this.onScrollEndDrag = this.onScrollEndDrag.bind(this);
+    this.scrollToNext = this.scrollToNext.bind(this);
+    this.scrollTo = this.scrollTo.bind(this);
+    this.setState({
+      actElement : 1,
+      currentScrollPosY : 0,
+      height : Dimensions.get('screen').height-getStatusBarHeight(),
+      scrollThreshold : 70
+    });
+  }
+
+  /**
+   * input : -1 or 1 
+   * -1 scroll to prev
+   * 1 scroll to next
+   */
+  scrollToNext = (direction) => {
+    this.setState({
+      actElement : this.state.actElement + direction,
+      currentScrollPosY : (this.state.actElement + direction) * this.state.height
+    }, function() {
+      this.scrollTo();
+      if (this.state.actElement % 10 == 5) {
+        this.props.action();
+      }
+    });
+  }
+
+  scrollTo = () => {
+    this.scroller.scrollTo({y: this.state.currentScrollPosY, animated: true});
+  }
+
+  onScrollEndDrag = (event) => {
+    if(event.nativeEvent.contentOffset.y > this.state.currentScrollPosY+this.state.scrollThreshold) {
+      this.scrollToNext(1);
+    } else if (event.nativeEvent.contentOffset.y < this.state.currentScrollPosY-this.state.scrollThreshold) {
+      this.scrollToNext(-1);
+    } else {
+      this.scrollTo();
+    }
+  }
+
   render() {
     return (
-      <ScrollView style={styles.scrollContainer}>
-        <View style={styles.container}>
+      //<ScrollView style={styles.scrollContainer}>
+      <ScrollView   
+        onScrollEndDrag={this.onScrollEndDrag}
+        ref={(ref) => {
+          this.scroller = ref }}
+        >
+        <View style={styles.container} 
+              ref={(ref) => {
+                this.videofeedView = ref }} >
             {
               /**
                * Loop through video urls and create VideoSingleForFeed Elements
@@ -91,7 +162,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 2,
+    flexWrap: 'wrap'
   }
 });
