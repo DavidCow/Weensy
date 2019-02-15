@@ -8,7 +8,7 @@ import {
   StyleSheet, 
   View,
   ScrollView,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   Text,
   Dimensions
 } from 'react-native';
@@ -139,14 +139,15 @@ class VideoContainerComponent extends Component {
               /**
                * Loop through video urls and create VideoSingleForFeed Elements
                */
-              this.props.currentVideoList.map(function(downloadUrl, i) {
+              this.props.currentVideoList.map((downloadUrl, i) => {
                 singleDownloadUrl = FIREBASE_VIDEO_PREFIX + FIREBASE_PREVIEW_FOLDERNAME + downloadUrl + FIREBASE_VIDEO_POSTFIX;
                 try {
                   beatname = downloadUrl.split("_")[0];
                 } catch(e) {
                   console.log("Could not split filename " + singleDownloadUrl + " by underscore _. Please Check the Filename: " + e);
                 }
-                return <VideoSingleForFeed key={i} singleDownloadUrl={singleDownloadUrl} filename={beatname}/>
+                var renderedVideoSingle = <VideoSingleForFeed ref={i} key={i} singleDownloadUrl={singleDownloadUrl} filename={beatname}/>;
+                return renderedVideoSingle;
               })
             }
         </View>
@@ -157,7 +158,7 @@ class VideoContainerComponent extends Component {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    flex: 1,
+    flex: 1
   },
   container: {
     flex: 1,

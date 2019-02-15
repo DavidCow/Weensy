@@ -25,6 +25,7 @@ export default class VideoSingleForFeed extends PureComponent {
       super(props);
       this.onPress = this.onPress.bind(this);
       this.pickSingle = this.pickSingle.bind(this);
+      this.onShare = this.onShare.bind(this);
       this.state = {
           image: null,
           images: null
@@ -104,6 +105,10 @@ export default class VideoSingleForFeed extends PureComponent {
         //this.player.seek(0);
       })
     }
+
+    onShare() {
+      console.log("OnShare");
+    }
   
     render() {
       return (
@@ -129,6 +134,12 @@ export default class VideoSingleForFeed extends PureComponent {
                                   onPress={() => this.pickSingle(this.props.filename)} >
                                           <Text style={styles.createButton}>Create Weensy</Text> 
                               </TouchableWithoutFeedback>
+                              <TouchableWithoutFeedback
+                                  style={styles.button}
+                                  onPress={() => console.log("Share")} >
+                                          <Text style={styles.shareButton}>Share</Text> 
+                              </TouchableWithoutFeedback>
+                              <Text style={styles.songtitle}>Song Title - Artist</Text> 
                 </View>
         </TouchableWithoutFeedback>
           
@@ -156,5 +167,18 @@ export default class VideoSingleForFeed extends PureComponent {
       left: Dimensions.get('screen').width * 0.7,
       top: (Dimensions.get('screen').height-getStatusBarHeight()) * 0.6,
       color: 'white'
+    },
+    shareButton: {
+      position: 'absolute',
+      left: Dimensions.get('screen').width * 0.7,
+      top: (Dimensions.get('screen').height-getStatusBarHeight()) * 0.634,
+      color: 'white'
+    },
+    songtitle: {
+      position: 'absolute',
+      left: Dimensions.get('screen').width * 0.08,
+      top: (Dimensions.get('screen').height-getStatusBarHeight()) * 0.74,
+      color: 'rgba(255,255,255,0.75)',
+      fontSize: 15
     }
   });
