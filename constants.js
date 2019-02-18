@@ -1,4 +1,4 @@
-export const VIDEOFEED_FILENAME = "videofeed.json";
+export const VIDEOFEED_FILENAME = "/videofeed.json";
 export const GS_PATH = "gs://weensy1.appspot.com";
 export const NUMBER_VIDEOSFEED = 10;
 export const FIREBASE_VIDEO_PREFIX = "https://firebasestorage.googleapis.com/v0/b/weensy1.appspot.com/o";

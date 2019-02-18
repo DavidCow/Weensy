@@ -17,7 +17,7 @@ const MyWeensysPageStack = createStackNavigator({
   'EditVideoPage' : {
     screen: EditVideoPage,
     navigationOptions: {
-      title: 'Edit Video Page',
+      title: 'Weensy Creator',
     }
   },
   'ShareVideoPage' : {

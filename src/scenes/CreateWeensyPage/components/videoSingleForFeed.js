@@ -11,7 +11,7 @@ import {
     Alert
   } from 'react-native';
 import NavigationService from '../../../NavigationService';
-import { getJsonListFromFirebaseStorage } from '../../../services/firebaseHelper';
+import { getJsonListFromFirebaseStorage, getFirebaseFileByUrl } from '../../../services/firebaseHelper';
 import { BEATS_FILENAME, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX, FIREBASE_TEMPLATE_SOUNDS_FOLDERNAME, OGG} from '../../../../constants';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -45,7 +45,7 @@ export default class VideoSingleForFeed extends PureComponent {
       * Get beats.json for frequencies
       */
     setSelectedBeat() {
-      getJsonListFromFirebaseStorage(BEATS_FILENAME, "").then((json) => 
+      getFirebaseFileByUrl(BEATS_FILENAME, "").then((json) => 
       this.setState({
         selectedBeat : json.beats[this.props.filename]
       }, function() {

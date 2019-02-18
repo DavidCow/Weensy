@@ -19,7 +19,7 @@ import {
   FIREBASE_VIDEO_POSTFIX,
   FIREBASE_PREVIEW_FOLDERNAME
 } from '../../../constants';
-import { getJsonListFromFirebaseStorage } from '../../services/firebaseHelper';
+import { getJsonListFromFirebaseStorage, getFirebaseFileByUrl } from '../../services/firebaseHelper';
 import VideoSingleForFeed from './components/videoSingleForFeed';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -41,7 +41,7 @@ export default class CreateWeensyPage extends Component {
      * Initial call of setState and fetching entire videofeedlist from Firebase
      * Then setting the first 10 videos as an array into list.
      */
-    getJsonListFromFirebaseStorage(VIDEOFEED_FILENAME).then((json) => 
+    getFirebaseFileByUrl(VIDEOFEED_FILENAME).then((json) => 
     this.setState({
       json : json, 
       currentVideoList : json.preview_videos.slice(0, NUMBER_VIDEOSFEED),

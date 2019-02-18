@@ -11,7 +11,8 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
-  CameraRoll
+  CameraRoll,
+  StatusBar
 } from 'react-native';
 import Video from 'react-native-video';
 import { Slider } from 'react-native-elements';
@@ -45,8 +46,11 @@ export default class EditVideoPage extends Component {
     this.onPressNext = this.onPressNext.bind(this);
 
     this.playSound = this.playSound.bind(this);
+    
   }
-
+  componentDidMount() {
+    StatusBar.setHidden(true, 'slide');
+  }
   componentWillMount() {
     var RNFS = require("react-native-fs");
     var rawHeight = this.props.navigation.getParam('height');
@@ -253,46 +257,43 @@ export default class EditVideoPage extends Component {
   render() {
     return (
       <View style={styles.container}>
-            <View style={styles.pressNextButton}>
-              <TouchableOpacity onPress={this.onPressNext}> 
-                <Text>NEXT</Text> 
+              <TouchableOpacity onPress={this.onPressNext} style={styles.pressNextButtonTouchable}> 
+                <Text style={styles.nextButton}>NEXT</Text> 
               </TouchableOpacity>
               {
-              this.state.showLoadingIndicator ? <ActivityIndicator /> : <View />
+              this.state.showLoadingIndicator ? 
+              <ActivityIndicator /> : <View />
               }
-            </View>
               <View style ={styles.videoContainer}>
+              <TouchableOpacity onPress={this.onPressPlay}> 
                         <View style={{ 
                             width: this.state.videoWidth,             // Change number "2" - 6 to change element number for one row
                             height: this.state.videoHeight,           // Set to Screenheight
                             backgroundColor: 'blue',
                         }}>
                          
-                        <Video source={{uri : this.state.currentVideoUri, type: this.props.navigation.getParam('mime', null)}}  // Can be a URL or a local file.
-                                          ref={(ref) => {
-                                            this.player = ref
-                                          }}                                              // Store reference
-                                          onBuffer={this.onBuffer}                        // Callback when remote video is buffering
-                                          onError={this.videoError}                       // Callback when video cannot be loaded
-                                          onLoad={this.onLoad}
-                                          onEnd={this.onEnd}
-                                          onProgress={this.onProgress}
-                                          style={styles.backgroundVideo} 
-                                          repeat={false}
-                                          paused={this.state.paused} 
-                                          rate={1}
-                                          volume={1}
-                                          muted={false}
-                                          resizeMode={'stretch'}
+                                    <Video source={{uri : this.state.currentVideoUri, type: this.props.navigation.getParam('mime', null)}}  // Can be a URL or a local file.
+                                                      ref={(ref) => {
+                                                        this.player = ref
+                                                      }}                                              // Store reference
+                                                      onBuffer={this.onBuffer}                        // Callback when remote video is buffering
+                                                      onError={this.videoError}                       // Callback when video cannot be loaded
+                                                      onLoad={this.onLoad}
+                                                      onEnd={this.onEnd}
+                                                      onProgress={this.onProgress}
+                                                      style={styles.backgroundVideo} 
+                                                      repeat={false}
+                                                      paused={this.state.paused} 
+                                                      rate={1}
+                                                      volume={1}
+                                                      muted={false}
+                                                      resizeMode={'stretch'}
                                           /> 
                       </View>
+                          </TouchableOpacity>
               </View>
-            <Slider value={this.state.value} onValueChange={this.onSliderChange} />
-            <TouchableOpacity onPress={this.onPressPlay}> 
-              <Text>PLAY</Text> 
-            </TouchableOpacity>
-            <Text style={{backgroundColor: 'blue'}}>Beat position {Math.round(this.state.selectedBeatPosition*100)/100}</Text>
-            <Text style={styles.welcome}>Drag Slider to adjust Beat.</Text>
+            <Slider value={this.state.value} onValueChange={this.onSliderChange} style={styles.slider}/>
+            <Text style={styles.timecode}>{Math.round(this.state.selectedBeatPosition*100)/100} / {Math.round(convertMsToSec(this.state.duration))}</Text>
       </View>
     );
   }
@@ -302,8 +303,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-around',
-    backgroundColor: 'green'
+    backgroundColor: 'white'
   },
   welcome: {
     fontSize: 20,
@@ -323,12 +323,21 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'blue'
+    backgroundColor: 'black'
   },
-  pressNextButton: {
+  pressNextButtonTouchable: {
     width: Dimensions.get('window').width,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    backgroundColor: 'blue'
+    alignItems: 'flex-end'
+  },
+  nextButton: {
+    color: 'blue',
+    fontSize: 25
+  },
+  slider: {
+    marginTop: "-3%"
+  },
+  timecode: {
+    marginTop: "-3%",
+    marginLeft: "2%"
   }
 });

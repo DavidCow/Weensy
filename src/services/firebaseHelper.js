@@ -1,6 +1,6 @@
 
 import firebase from 'react-native-firebase';
-import { GS_PATH } from '../../constants';
+import { GS_PATH, FIREBASE_VIDEO_PREFIX, FIREBASE_VIDEO_POSTFIX } from '../../constants';
 
 
 /**
@@ -37,6 +37,8 @@ export function downloadFileFromFirebaseStorage(googleStorageUrl, localFilePath)
  */
 export function getJsonListFromFirebaseStorage(filename, foldername="/") {
     var firebaseUrl = GS_PATH + foldername + filename;
+
+    //TODO: replace below part with getFirebaseFileByUrl
     return getDownloadUrlFromFirebaseStorage(firebaseUrl).then(downloadUrl => {
         return fetch(downloadUrl,
             {
@@ -47,7 +49,25 @@ export function getJsonListFromFirebaseStorage(filename, foldername="/") {
             return response;
         })
         .catch(err => {
-            console.log("getVideofeedList: " + err);
+            console.log("getJsonListFromFirebaseStorage: " + err);
         });
+    });
+}
+
+/**
+ * Create firebase url and access file
+ */
+export function getFirebaseFileByUrl(filename) {
+    var downloadUrl = FIREBASE_VIDEO_PREFIX + filename + FIREBASE_VIDEO_POSTFIX;
+    return fetch(downloadUrl,
+        {
+            method: "GET"
+        })
+        .then((response) => response.json())
+        .then(response => {
+        return response;
+    })
+    .catch(err => {
+        console.log("getFirebaseFileByUrl: " + err);
     });
 }
