@@ -137,7 +137,6 @@ export default class EditVideoPage extends Component {
       paused : false
     });
 
-    ///TODO : SOUND ONLY PLAYS ONCE, DO I HAVE TO REDOWNLOAD IT EVERYTIME? OR RESET SOMETHING
     this.playSound(this.state.templateSound);
   }
 
