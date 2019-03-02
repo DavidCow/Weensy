@@ -49,19 +49,21 @@ export default class CreateWeensyPage extends Component {
     }, function() {
       //Do this after asynchronous setState(..) call
     }))
-    .catch(err => console.log(err));
+    .catch(err => console.log("Loading video feed failed: " + err));
   }
 
   onAddVideos = () => {
+    console.log("ADD VIDEOS videoLoadIndex: " + this.state.videoLoadIndex);
     var endIndex = this.state.videoLoadIndex + 10;
-    if (this.state.videoLoadIndex+10 < this.state.json.length) {
+    if (this.state.videoLoadIndex+10 >= this.state.json.length) {
+      console.log("END");
       endIndex = this.state.json.length;
-      if (this.state.videoLoadIndex == endIndex) return;
-    } 
-    this.setState({
-      currentVideoList : [...this.state.currentVideoList, ...this.state.json.preview_videos.slice(this.state.videoLoadIndex, endIndex)],
-      videoLoadIndex : endIndex
-    });
+    } else {
+      this.setState({
+        currentVideoList : [...this.state.currentVideoList, ...this.state.json.preview_videos.slice(this.state.videoLoadIndex, endIndex)],
+        videoLoadIndex : endIndex
+      });
+    }
   }
 
   render() {
@@ -122,6 +124,7 @@ class VideoContainerComponent extends Component {
     } else {
       this.scrollTo();
     }
+    console.log("actElement: "+this.state.actElement);
   }
 
   render() {

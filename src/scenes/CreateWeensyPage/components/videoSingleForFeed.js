@@ -26,6 +26,8 @@ export default class VideoSingleForFeed extends PureComponent {
       this.onPress = this.onPress.bind(this);
       this.pickSingle = this.pickSingle.bind(this);
       this.onShare = this.onShare.bind(this);
+      this.videoError = this.videoError.bind(this);
+      this.onLoad = this.onLoad.bind(this);
       this.state = {
           image: null,
           images: null
@@ -109,6 +111,15 @@ export default class VideoSingleForFeed extends PureComponent {
     onShare() {
       console.log("OnShare");
     }
+
+    videoError = (error) => {
+      console.log("VideoError: " + error.msg + error.message);
+    }
+
+    onLoad() {
+      //console.log("Video loaded: " + this.props.singleDownloadUrl);
+      this.player.seek(0);
+    }
   
     render() {
       return (
@@ -122,6 +133,7 @@ export default class VideoSingleForFeed extends PureComponent {
                                   }}                                              // Store reference
                                   onBuffer={this.onBuffer}                        // Callback when remote video is buffering
                                   onError={this.videoError}                       // Callback when video cannot be loaded
+                                  onLoad={this.onLoad}
                                   style={styles.backgroundVideo} 
                                   repeat={true}
                                   paused={this.state.isVideoPaused} 

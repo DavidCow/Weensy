@@ -59,6 +59,7 @@ export function getJsonListFromFirebaseStorage(filename, foldername="/") {
  */
 export function getFirebaseFileByUrl(filename) {
     var downloadUrl = FIREBASE_VIDEO_PREFIX + filename + FIREBASE_VIDEO_POSTFIX;
+    console.log(downloadUrl);
     return fetch(downloadUrl,
         {
             method: "GET"

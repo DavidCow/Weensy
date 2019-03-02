@@ -21,7 +21,7 @@ import NavigationService from './../../NavigationService';
 import {calculateTimeBetweenTwoTimecodesInInt, convertSecToMS, convertMsToSec, calculateEndOfClip, convertDurationInSecToTimeCode} from './services/timecodeHelper';
 import {createCommand, executeCommand, addToMergeFile} from './services/ffmpegHelper';
 import { RNFFmpeg } from 'react-native-ffmpeg';
-import { MP4 } from '../../../constants';
+import { MP4, WEENSY_FILENAME } from '../../../constants';
 
 
 /**
@@ -235,10 +235,10 @@ export default class EditVideoPage extends Component {
     
     //MERGE -> MIX AUDIO IN -> NAVIGATE
     RNFFmpeg.execute(command).then(result => {
-      command = '-y -i ' + RNFS.DocumentDirectoryPath   +'/merged.mp4 -i ' + this.state.templateSoundUri + ' -filter_complex amerge ' + RNFS.DocumentDirectoryPath   +'/mergedWithMusic.mp4';
+      command = '-y -i ' + RNFS.DocumentDirectoryPath   +'/merged.mp4 -i ' + this.state.templateSoundUri + ' -filter_complex amerge ' + RNFS.DocumentDirectoryPath   +'/'+ WEENSY_FILENAME;
       RNFFmpeg.execute(command).then(result => {
-        CameraRoll.saveToCameraRoll(RNFS.DocumentDirectoryPath + '/mergedWithMusic.mp4', 'video').then(() => {
-          NavigationService.navigate('ShareVideoPage', {params: this.props.navigation.state.params, currentVideoUri: RNFS.DocumentDirectoryPath   +'/mergedWithMusic.mp4'});
+        CameraRoll.saveToCameraRoll(RNFS.DocumentDirectoryPath + '/'+ WEENSY_FILENAME, 'video').then(() => {
+          NavigationService.navigate('ShareVideoPage', {params: this.props.navigation.state.params, currentVideoUri: RNFS.DocumentDirectoryPath   +'/'+ WEENSY_FILENAME});
         }).catch((err) => console.log('Error: Merged File could not be saved into camera roll. Msg: ' + err));
       });
     });

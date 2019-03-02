@@ -154,10 +154,11 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-ffmpeg')
-    compile project(':react-native-sound')
-    compile project(':react-native-image-crop-picker')
-    compile project(':react-native-fs')
+    implementation project(':react-native-thumbnail')
+    implementation project(':react-native-ffmpeg')
+    implementation project(':react-native-sound')
+    implementation project(':react-native-image-crop-picker')
+    implementation project(':react-native-fs')
     implementation project(':react-native-firebase')
     implementation project(':react-native-video')
     implementation project(':react-native-gesture-handler')

@@ -44,6 +44,7 @@
 		928FA95BB4B14EDBADB8387D /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A29053FEAEA54C1A9AF42095 /* libimageCropPicker.a */; };
 		58C37F3984F64E029C3D8AEA /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95BFCFF3DA8A4F1081B42E54 /* libRNSound.a */; };
 		E42725AD031A4BD293AA71DA /* libReactNativeFFmpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B85D20244FFF4C0E8FBC13EC /* libReactNativeFFmpeg.a */; };
+		89F0DC15659942E7A54B7B5A /* libRNThumbnail.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8C8D26EBC14D7D8A5C648E /* libRNThumbnail.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -363,6 +364,8 @@
 		95BFCFF3DA8A4F1081B42E54 /* libRNSound.a */ = {isa = PBXFileReference; name = "libRNSound.a"; path = "libRNSound.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		C5B2D6F155CE4FCEBAC24E77 /* ReactNativeFFmpeg.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeFFmpeg.xcodeproj"; path = "../node_modules/react-native-ffmpeg/ios/ReactNativeFFmpeg.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		B85D20244FFF4C0E8FBC13EC /* libReactNativeFFmpeg.a */ = {isa = PBXFileReference; name = "libReactNativeFFmpeg.a"; path = "libReactNativeFFmpeg.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		6ACA7D8B144E4BA980960CB2 /* RNThumbnail.xcodeproj */ = {isa = PBXFileReference; name = "RNThumbnail.xcodeproj"; path = "../node_modules/react-native-thumbnail/ios/RNThumbnail.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		4D8C8D26EBC14D7D8A5C648E /* libRNThumbnail.a */ = {isa = PBXFileReference; name = "libRNThumbnail.a"; path = "libRNThumbnail.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -397,6 +400,7 @@
 				928FA95BB4B14EDBADB8387D /* libimageCropPicker.a in Frameworks */,
 				58C37F3984F64E029C3D8AEA /* libRNSound.a in Frameworks */,
 				E42725AD031A4BD293AA71DA /* libReactNativeFFmpeg.a in Frameworks */,
+				89F0DC15659942E7A54B7B5A /* libRNThumbnail.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +594,7 @@
 				C574B95D18A945D399356BA9 /* imageCropPicker.xcodeproj */,
 				D335DF4C05A941F0BDC48B3F /* RNSound.xcodeproj */,
 				C5B2D6F155CE4FCEBAC24E77 /* ReactNativeFFmpeg.xcodeproj */,
+				6ACA7D8B144E4BA980960CB2 /* RNThumbnail.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1224,6 +1229,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1234,6 +1240,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Debug;
@@ -1262,6 +1269,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1272,6 +1280,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Release;
@@ -1301,6 +1310,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Debug;
@@ -1329,6 +1339,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Release;
@@ -1365,6 +1376,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1375,6 +1387,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Debug;
@@ -1411,6 +1424,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1421,6 +1435,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Release;
@@ -1456,6 +1471,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1466,6 +1482,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Debug;
@@ -1501,6 +1518,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1511,6 +1529,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound\RNSound",
 					"$(SRCROOT)\..\node_modules\react-native-ffmpeg\ios",
+					"$(SRCROOT)\..\node_modules\react-native-thumbnail\ios",
 				);
 			};
 			name = Release;
