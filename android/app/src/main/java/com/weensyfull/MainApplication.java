@@ -3,6 +3,7 @@ package com.weensyfull;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import me.hauvo.thumbnail.RNThumbnailPackage;
 import com.arthenica.reactnative.RNFFmpegPackage;
 import com.zmxv.RNSound.RNSoundPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
             new RNThumbnailPackage(),
             new RNFFmpegPackage(),
             new RNSoundPackage(),

@@ -113,6 +113,12 @@ export default class VideoSingleForFeed extends PureComponent {
     }
 
     videoError = (error) => {
+      /**
+       * 02.03.2019
+       * Current Todos
+       * Load all 50 videos, is the edge case correct? 50th video and ScrollView actElement correct? Check+1 -1 mechanism
+       * 
+       */
       console.log("VideoError: " + error.msg + error.message);
     }
 

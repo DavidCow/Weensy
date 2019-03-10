@@ -9,3 +9,4 @@ react-native-elements & react-native-vector-icons
 react-native-sound
 react-native-ffmpeg (1. minsdk to 21 2. xmlns:tools="http://schemas.android.com/tools" in androidmanifest 3. node_modules -> react-native-fs gesture-handler change minsdk in build.gradle)
 react-native-status-bar-height
+react-native-vector-icons

@@ -10,21 +10,18 @@ import MyWeensysPage from './scenes/MyWeensysPage';
 import EditVideoPage from './scenes/EditVideoPage';
 import NavigationService from './NavigationService';
 import ShareVideoPage from './scenes/ShareVideoPage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const MyWeensysPageStack = createStackNavigator({ 
-  'MyWeensysPage': MyWeensysPage,
+  'MyWeensysPage': {
+    screen: MyWeensysPage
+  },
   'EditVideoPage' : {
-    screen: EditVideoPage,
-    navigationOptions: {
-      title: 'Weensy Creator',
-    }
+    screen: EditVideoPage
   },
   'ShareVideoPage' : {
-    screen: ShareVideoPage,
-    navigationOptions: {
-      title: 'Share Video'
-    }
+    screen: ShareVideoPage
   }
 });
 
@@ -41,15 +38,39 @@ MyWeensysPageStack.navigationOptions = ({ navigation }) => {
 
 const CreateWeensyPageStack = createStackNavigator({ CreateWeensyPage: CreateWeensyPage });
 const LoginPageStack = createStackNavigator({ LoginPage: LoginPage });
+const ICON_SIZE = 22;
 
 const AppContainer = createAppContainer(createBottomTabNavigator(
   {
-    CreateWeensyPage: CreateWeensyPageStack,
-    MyWeensysPage: MyWeensysPageStack,
-    LoginPage: LoginPageStack
+    CreateWeensyPage: {
+      screen: CreateWeensyPageStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="tv" size={ICON_SIZE}/>
+        )
+      }
+    },
+    MyWeensysPage: {
+      screen: MyWeensysPageStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="archive" size={ICON_SIZE}/>
+        )
+      }
+    },
+    LoginPage: {
+      screen: LoginPageStack,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="bookmark" size={ICON_SIZE}/>
+        )
+      }
+    }
   },
   {
-    // Other configuration remains unchanged 
+    tabBarOptions: {
+      showLabel: false
+    }
   }
 ));
 
