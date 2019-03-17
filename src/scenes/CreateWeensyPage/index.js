@@ -27,16 +27,19 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 export default class CreateWeensyPage extends Component {
   static navigationOptions = { title: 'Welcome', header: null };
 
-  componentWillMount() {
-    this.onAddVideos = this.onAddVideos.bind(this);
-    /**
-     * Set inital state so render is possible
-     */
+  initState() {
     this.setState({
       json : [], 
       currentVideoList : [],
       videoLoadIndex : NUMBER_VIDEOSFEED
     });
+  }
+
+  componentWillMount() {
+    this.onAddVideos = this.onAddVideos.bind(this);
+
+    this.initState();
+
      /**
      * Initial call of setState and fetching entire videofeedlist from Firebase
      * Then setting the first 10 videos as an array into list.
@@ -53,7 +56,7 @@ export default class CreateWeensyPage extends Component {
   }
 
   onAddVideos = () => {
-    console.log("ADD VIDEOS videoLoadIndex: " + this.state.videoLoadIndex);
+    console.log("ADD VIDEOS videoLoadIndex: " + this.state.videoLoadIndex + " json.length: "  +this.state.json.length);
     var endIndex = this.state.videoLoadIndex + 10;
     if (this.state.videoLoadIndex+10 >= this.state.json.length) {
       console.log("END");
@@ -100,9 +103,10 @@ class VideoContainerComponent extends Component {
    * 1 scroll to next
    */
   scrollToNext = (direction) => {
+    var newActElement = this.state.actElement + direction;
     this.setState({
-      actElement : this.state.actElement + direction,
-      currentScrollPosY : (this.state.actElement + direction) * this.state.height
+      actElement : newActElement,
+      currentScrollPosY : newActElement * this.state.height
     }, function() {
       this.scrollTo();
       if (this.state.actElement % 10 == 5) {
@@ -129,7 +133,6 @@ class VideoContainerComponent extends Component {
 
   render() {
     return (
-      //<ScrollView style={styles.scrollContainer}>
       <ScrollView   
         onScrollEndDrag={this.onScrollEndDrag}
         ref={(ref) => {
